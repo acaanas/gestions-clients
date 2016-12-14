@@ -1,0 +1,23 @@
+{
+  "name": "gestion-clients",
+  "description": "Application pour gérer les demandes des clients",
+  "version": "0.0.1",
+  "private": true,
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "connect-ensure-login": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "dustjs-linkedin": "^2.7.5",
+    "express": "^4.14.0",
+    "express-myconnection": "^1.0.4",
+    "express-mysql-session": "^1.2.0",
+    "express-session": "^1.14.2",
+    "express-validator": "^3.0.0",
+    "hoffman": "^0.2.2",
+    "moment": "^2.17.1",
+    "mysql": "^2.12.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
+  }
+}

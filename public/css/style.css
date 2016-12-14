@@ -1,0 +1,13 @@
+body {
+    background:#fff;
+}
+.container {
+    margin-top: 30px;
+}
+.top-space {
+    margin-top: 20px;
+}
+.bottom-space {
+    margin-bottom: 20px;
+}
+ul.err-area li{color:red}

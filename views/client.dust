@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gestion des demandes</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+        <link rel="stylesheet" href="/public/css/style.css">
+    </head>
+<body>
+     <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-9">
+                <form action="" method="post" id='formulaire'>
+                {#client}
+                    <div class="form-group">
+                    <label for="telephone">Telephone:</label>
+                    <input type="number" class="form-control" name="telephone" placeholder="Entrer le numéro de téléphone du client" required value={telephone}>
+                    </div>
+                    <div class="form-group">
+                    <label for="nom">Nom:</label>
+                    <input type="text" class="form-control" name="nom" placeholder="Entrer le nom du client" required value={nom}>
+                    </div>
+                    <div class="form-group">
+                    <label for="prenom">Prénom:</label>
+                    <input type="text" class="form-control" name="prenom" placeholder="Entrer le prénom du client" required value={prenom}>
+                    </div>
+                    <div class="form-group">
+                    <label for="mail">Email:</label>
+                    <input type="email" class="form-control" name="mail" placeholder="Entrer l'email du client" required value={mail}>
+                    </div>
+                {/client}
+                    <div class="form-group">
+                    <label for="type">Type:</label>
+                    <select name='type' class="form-control">
+                        <option value="achat">Achat</option>
+                        <option value="devis">Devis</option>
+                        <option value="apresvente">Après Vente</option>
+                        <option value="reclamation">Réclamation</option>
+                    </select>
+                    </div>
+                    <div class="form-group">
+                    <label for="demande">Demande:</label>
+                    <input type="text" class="form-control" name="demande" placeholder="Entrer le détail de la demande du client" required value={demande}>
+                    </div>
+                    <input type="submit" value="Valider" id="addButton" style="display: none" class="btn btn-success btn-md pull-right" />
+                    <input type="submit" value="Valider" id="editButton" style="display: none" class="btn btn-success btn-md pull-right" />
+                </form>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <ul id="err-area"></ul>
+            </div>
+        </div>
+        <div class="row top-space bottom-space">
+            <h3>Liste des anciennes demandes du client en cours:</h3>
+            <table class="table top-space">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    <th>Agent</th>
+                    <th>Type</th>
+                    <th>Demande</th>
+                </tr>
+                </thead>
+                <tbody>
+                {#listeDemandes}
+                <tr>
+                    <td>{date}</td>
+                    <td>{heure}</td>
+                    <td>{agent}</td>
+                    <td>{type}</td>
+                    <td>{demande}</td>
+                </tr>
+                {/listeDemandes}
+                </tr>
+            </table>
+  
+        </div>
+    </div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+        crossorigin="anonymous"></script>
+<script>
+  
+   $( document ).ready(function() {
+    
+    var currentUrl = window.location.href;
+    var lastOfUrl = currentUrl.substring(currentUrl.lastIndexOf('/'));
+
+    console.log(currentUrl);
+    console.log(lastOfUrl);
+
+    if(lastOfUrl.length == 1) {
+      $('#formulaire').attr('action', '/client');
+      $( "#addButton" ).show();
+    }
+    else {
+      $( "#editButton" ).show();
+    }
+
+    Edit = function(){
+
+        console.log('data to send', $('#formulaire').serialize());
+       
+       $.ajax({
+            
+            url:'/client' + lastOfUrl,
+            method:"PUT",
+            type:"put",
+            data:$("#formulaire").serialize(),
+            success:function(res){
+                window.location.href = '/search';
+                return false;
+            },
+            error:function(xhr, status, error){
+                
+                console.log(xhr.responseText);
+                var err = '';
+                $.each(JSON.parse(xhr.responseText) , function(i, item) {
+                   
+                     err +='<li>'+item.msg+'</li>';
+                });
+                $("#err-area").html(err);    
+                return false;
+            }
+            
+           });
+
+    };
+
+    $('#editButton').on('click', function(){
+        Edit();
+        return false;
+    });
+
+});
+
+</script>
+</body>
+</html>
